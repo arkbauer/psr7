@@ -69,7 +69,8 @@ final class Message
             return null;
         }
 
-        $summary = $body->read($truncateAt);
+        // Read extra bites to avoid multibyte char breaking
+        $summary = mb_substr($body->read($truncateAt * 4), 0, $truncateAt);
         $body->rewind();
 
         if ($size > $truncateAt) {
